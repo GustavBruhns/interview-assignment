@@ -5,14 +5,14 @@ function main() {
     try {
         let q = "SELECT * FROM users;";
         // Run query in Database db, write contents to file, delete retrieved rows from db    
-        getAndDeleteRowsWithBackup(q); 
+        getAndDeleteUsersWithBackup(q); 
     }
     catch(e) {
         console.log("Error occured: " + e);
     }
 }
 
-function getAndDeleteRowsWithBackup(query) {
+function getAndDeleteUsersWithBackup(query) {
     db.all(query, [], (e, users) => {
         if (e) {
             console.log("Error occured while attempting to query database: \n");
@@ -21,7 +21,7 @@ function getAndDeleteRowsWithBackup(query) {
         
         if (fs.existsSync("BackUp.txt")) {
             fs.writeFileSync("BackUp.txt", JSON.stringify(users, null, 4));
-            if (checkDataIntegrity(rows) === true) {
+            if (checkDataIntegrity(users) === true) {
                 console.log("Data was correctly written to backup file.");
                 deleteUsers(users);
             } else {
